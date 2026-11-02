@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyDu - Python Learning Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#121214',
+                        cardbg: '#1a1a22',
+                        cardborder: '#2e2e3a',
+                        electricblue: '#2563eb',
+                        electricbluehover: '#1d4ed8',
+                        accentyellow: '#facc15',
+                        accentyellowhover: '#eab308',
+                        softwhite: '#f4f4f5'
+                    },
+                    boxShadow: {
+                        'chunky': '0 6px 0 0 #2e2e3a',
+                        'chunky-blue': '0 6px 0 0 #1d4ed8',
+                        'chunky-yellow': '0 6px 0 0 #ca8a04',
+                        'chunky-card': '0 8px 0 0 #18181b',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font Fredoka for Cartoony Vibe + Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fun {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-softwhite min-h-screen flex flex-col antialiased selection:bg-electricblue selection:text-white">
+
+    <!-- Notification Toast Modal (No native alert) -->
+    <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-cardbg border-2 border-cardborder shadow-2xl rounded-2xl p-4 flex items-center space-x-3 max-w-sm">
+        <div id="toast-icon" class="w-10 h-10 rounded-xl bg-electricblue/20 text-electricblue flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-gamepad"></i>
+        </div>
+        <div>
+            <h4 id="toast-title" class="font-fun font-bold text-sm text-softwhite">Hey there!</h4>
+            <p id="toast-msg" class="text-xs text-zinc-400">Welcome to your Python journey.</p>
+        </div>
+    </div>
+
+    <!-- CARTOONY TOP NAVBAR -->
+    <header class="w-full bg-cardbg border-b-4 border-cardborder px-6 py-4 sticky top-0 z-20">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo -->
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="showToast('PyDu', 'You are at the home dashboard!')">
+                <div class="w-12 h-12 rounded-2xl bg-electricblue border-2 border-blue-400 flex items-center justify-center shadow-chunky-blue transform -rotate-3 hover:rotate-0 transition">
+                    <i class="fa-solid fa-code text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-fun text-2xl font-bold tracking-wide text-softwhite">Py<span class="text-accentyellow">Du</span></h1>
+                    <span class="text-[10px] font-fun uppercase tracking-wider text-zinc-400">Python for Pakistan</span>
+                </div>
+            </div>
+
+            <!-- Gamification Stats (Streak & XP) -->
+            <div class="flex items-center space-x-4">
+                <!-- Streak Pill -->
+                <div class="flex items-center space-x-2 px-3.5 py-2 rounded-2xl bg-darkbg border-2 border-cardborder shadow-chunky">
+                    <span class="text-xl animate-bounce">🔥</span>
+                    <span class="font-fun font-extrabold text-accentyellow text-sm">0</span>
+                </div>
+                <!-- XP Pill -->
+                <div class="flex items-center space-x-2 px-3.5 py-2 rounded-2xl bg-darkbg border-2 border-cardborder shadow-chunky">
+                    <span class="text-xl">⚡</span>
+                    <span class="font-fun font-extrabold text-electricblue text-sm">0 XP</span>
+                </div>
+                <!-- Profile Avatar -->
+                <div onclick="showToast('Profile', 'Profile settings coming soon!')" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-accentyellow to-orange-500 border-2 border-yellow-300 flex items-center justify-center font-fun font-bold text-darkbg text-sm cursor-pointer shadow-chunky hover:scale-105 transition">
+                    ME
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="flex-grow flex items-center justify-center p-6 max-w-4xl mx-auto w-full">
+        <div class="w-full space-y-6">
+
+            <!-- Friendly Welcome Banner -->
+            <div class="text-center space-y-2 mb-8">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-electricblue/20 border-2 border-electricblue/40 text-electricblue font-fun text-xs font-bold tracking-wide uppercase">
+                    👋 Ready to start coding?
+                </span>
+                <h2 class="font-fun text-3xl md:text-4xl font-bold text-softwhite tracking-tight">Your Python Adventure Awaits</h2>
+                <p class="text-zinc-400 text-sm max-w-md mx-auto font-medium">Learn Python step by step with bite-sized fun lessons designed for absolute beginners.</p>
+            </div>
+
+            <!-- PROMINENT CHUNKY CARTOONY CARD FOR PYTHON COURSE -->
+            <div class="bg-cardbg border-4 border-cardborder rounded-3xl p-8 shadow-[0_12px_0_0_#2e2e3a] relative overflow-hidden transition hover:border-electricblue/60 group">
+                <!-- Decorative background blob -->
+                <div class="absolute -right-16 -bottom-16 w-48 h-48 bg-electricblue/10 rounded-full blur-2xl pointer-events-none group-hover:bg-electricblue/20 transition"></div>
+                <div class="absolute -left-16 -top-16 w-48 h-48 bg-accentyellow/10 rounded-full blur-2xl pointer-events-none"></div>
+
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 relative z-10">
+                    <div class="space-y-4 max-w-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-14 h-14 rounded-2xl bg-accentyellow border-2 border-yellow-300 flex items-center justify-center text-darkbg font-fun font-black text-2xl shadow-chunky-yellow transform rotate-3">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <div>
+                                <span class="font-fun text-xs uppercase font-bold tracking-wider text-accentyellow">Beginder Friendly</span>
+                                <h3 class="font-fun text-2xl md:text-3xl font-bold text-softwhite">Python Course</h3>
+                            </div>
+                        </div>
+                        <p class="text-zinc-300 text-sm leading-relaxed font-medium">
+                            Master the fundamentals, variables, loops, and functions through interactive challenges and a fun path.
+                        </p>
+                        <!-- 0% Progress indicator as requested -->
+                        <div class="inline-flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-darkbg border-2 border-cardborder text-xs font-fun font-bold text-zinc-400">
+                            <span class="w-2.5 h-2.5 rounded-full bg-accentyellow animate-pulse"></span>
+                            <span>0% Progress</span>
+                        </div>
+                    </div>
+
+                    <!-- Action Button taking us to levels.html -->
+                    <div class="w-full md:w-auto shrink-0">
+                        <a href="LEVELS/levels.html" class="w-full md:w-auto px-8 py-4 rounded-2xl bg-electricblue hover:bg-electricbluehover text-white font-fun font-bold text-base border-2 border-blue-400 shadow-chunky-blue transition transform active:translate-y-1 inline-flex items-center justify-center space-x-3">
+                            <span>Start Path</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investor Demo Note Footer -->
+            <div class="text-center pt-4">
+                <p class="text-xs text-zinc-500 font-fun">PyDu MVP • Designed for Pakistani Learners • Rs. 699/mo Pro Tier</p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Custom Toast Notification System (Replaces alert())
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            const titleEl = document.getElementById('toast-title');
+            const msgEl = document.getElementById('toast-msg');
+            
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3500);
+        }
+
+        // Trigger welcome toast on load
+        window.onload = function() {
+            setTimeout(() => {
+                showToast('Welcome!', 'Click "Start Path" to explore your Python levels.');
+            }, 500);
+        }
+    </script>
+</body>
+</html>

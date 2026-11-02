@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyDu - Python Adventure Path</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#121214',
+                        cardbg: '#1a1a22',
+                        cardborder: '#2e2e3a',
+                        electricblue: '#2563eb',
+                        electricbluehover: '#1d4ed8',
+                        accentyellow: '#facc15',
+                        accentyellowhover: '#eab308',
+                        softwhite: '#f4f4f5',
+                        bossred: '#dc2626',
+                        quizpurple: '#9333ea',
+                    },
+                    boxShadow: {
+                        'chunky': '0 6px 0 0 #2e2e3a',
+                        'chunky-blue': '0 6px 0 0 #1d4ed8',
+                        'chunky-yellow': '0 6px 0 0 #ca8a04',
+                        'chunky-red': '0 6px 0 0 #991b1b',
+                        'chunky-purple': '0 6px 0 0 #6b21a8',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-fun {
+            font-family: 'Fredoka', cursive, sans-serif;
+        }
+        /* Custom Winding Path Weave Animation / Positioning */
+        .path-node {
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .path-node:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-darkbg text-softwhite min-h-screen flex flex-col antialiased selection:bg-electricblue selection:text-white">
+
+    <!-- Notification Toast Modal -->
+    <div id="toast" class="fixed top-20 right-5 z-50 transform translate-x-full transition-transform duration-300 bg-cardbg border-2 border-cardborder shadow-2xl rounded-2xl p-4 flex items-center space-x-3 max-w-sm">
+        <div id="toast-icon" class="w-10 h-10 rounded-xl bg-electricblue/20 text-electricblue flex items-center justify-center font-bold text-lg">
+            <i class="fa-solid fa-map"></i>
+        </div>
+        <div>
+            <h4 id="toast-title" class="font-fun font-bold text-sm text-softwhite">Adventure Map</h4>
+            <p id="toast-msg" class="text-xs text-zinc-400">Click any unlocked node to play.</p>
+        </div>
+    </div>
+
+    <!-- CARTOONY TOP NAVBAR -->
+    <header class="w-full bg-cardbg border-b-4 border-cardborder px-6 py-4 sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <!-- Back to Dashboard -->
+            <a href="../dashboard.html" class="flex items-center space-x-2 px-4 py-2 rounded-2xl bg-darkbg border-2 border-cardborder shadow-chunky hover:border-electricblue transition font-fun text-sm font-bold text-zinc-300">
+                <i class="fa-solid fa-arrow-left text-electricblue"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <div class="text-center hidden sm:block">
+                <h1 class="font-fun text-xl font-bold text-softwhite">Python Adventure Path</h1>
+                <span class="text-[10px] font-fun uppercase tracking-wider text-accentyellow">132 Levels to Mastery</span>
+            </div>
+
+            <!-- Gamification Stats -->
+            <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-2xl bg-darkbg border-2 border-cardborder shadow-chunky">
+                    <span class="text-lg">🔥</span>
+                    <span class="font-fun font-extrabold text-accentyellow text-sm">0</span>
+                </div>
+                <div class="flex items-center space-x-1.5 px-3 py-1.5 rounded-2xl bg-darkbg border-2 border-cardborder shadow-chunky">
+                    <span class="text-lg">⚡</span>
+                    <span class="font-fun font-extrabold text-electricblue text-sm">0 XP</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN MAP CONTAINER -->
+    <main class="flex-grow py-12 px-4 max-w-2xl mx-auto w-full relative">
+        
+        <!-- Map Intro Banner -->
+        <div class="text-center mb-12 space-y-2">
+            <div class="inline-block px-4 py-1.5 rounded-full bg-accentyellow/10 border-2 border-accentyellow/30 text-accentyellow font-fun text-xs font-bold uppercase tracking-wide">
+                🗺️ Interactive Learning Map
+            </div>
+            <h2 class="font-fun text-3xl font-bold text-softwhite">Scroll Down & Conquer Python</h2>
+            <p class="text-zinc-400 text-xs font-medium">Level 1 is unlocked. Complete each challenge to unlock the next!</p>
+        </div>
+
+        <!-- Winding Nodes List Rendered via JavaScript -->
+        <div id="levels-container" class="flex flex-col items-center space-y-8 relative pb-16">
+            <!-- Dynamically injected levels go here -->
+        </div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="text-center pt-8 pb-12">
+            <button onclick="loadMoreLevels()" class="px-8 py-4 rounded-2xl bg-electricblue hover:bg-electricbluehover text-white font-fun font-bold text-base border-2 border-blue-400 shadow-chunky-blue transition transform active:translate-y-1 inline-flex items-center space-x-3">
+                <i class="fa-solid fa-angles-down animate-bounce"></i>
+                <span>Load More Levels</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- LEVEL DETAIL MODAL / POPUP CARD -->
+    <div id="level-modal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="modal-content" class="bg-cardbg border-4 border-cardborder rounded-3xl p-6 max-w-sm w-full shadow-[0_12px_0_0_#2e2e3a] transform scale-95 transition-transform duration-300 relative">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 w-9 h-9 rounded-xl bg-darkbg border-2 border-cardborder text-zinc-400 hover:text-white flex items-center justify-center font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="flex items-center space-x-3 mb-4">
+                <div id="modal-icon-box" class="w-14 h-14 rounded-2xl bg-electricblue border-2 border-blue-400 flex items-center justify-center text-white font-fun font-black text-2xl shadow-chunky-blue">
+                    <i class="fa-solid fa-code"></i>
+                </div>
+                <div>
+                    <span id="modal-level-badge" class="font-fun text-xs uppercase font-bold tracking-wider text-electricblue">Level 1</span>
+                    <h3 id="modal-title" class="font-fun text-xl font-bold text-softwhite">Move forward</h3>
+                </div>
+            </div>
+
+            <!-- Status Details -->
+            <div class="space-y-3 mb-6">
+                <div class="p-3 rounded-2xl bg-darkbg border-2 border-cardborder flex items-center justify-between text-xs font-fun font-bold">
+                    <span class="text-zinc-400">Current Status:</span>
+                    <span id="modal-status" class="text-accentyellow">Unlocked</span>
+                </div>
+                <p class="text-zinc-300 text-xs leading-relaxed font-medium">
+                    Dive into this interactive Python exercise, run tests, and earn XP to boost your learning streak!
+                </p>
+            </div>
+
+            <!-- Start Action Button -->
+            <a id="modal-start-btn" href="#" class="w-full py-3.5 rounded-2xl bg-accentyellow hover:bg-accentyellowhover text-darkbg font-fun font-extrabold text-sm border-2 border-yellow-300 shadow-chunky-yellow transition transform active:translate-y-1 flex items-center justify-center space-x-2">
+                <span>Start Level</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT FOR MAPPING 132 LEVELS -->
+    <script>
+        // Full dataset of 132 levels and stage markers
+        const rawData = [
+            { type: 'stage', title: 'Stage 0: Fundamentals & Logic Maze' },
+            { num: 1, title: 'Move forward' },
+            { num: 2, title: 'Turn left' },
+            { num: 3, title: 'Turn right' },
+            { num: 4, title: 'Combine turns' },
+            { num: 5, title: 'Practice turns' },
+            { num: 6, title: 'Repeat block' },
+            { num: 7, title: 'Repeat with turns' },
+            { num: 8, title: 'Hard maze', special: 'hard' },
+            { num: 9, title: 'If block' },
+            { num: 10, title: 'If with turns' },
+            { num: 11, title: 'If with repeat' },
+            { num: 12, title: 'If challenge', special: 'quiz' },
+            { num: 13, title: 'If else block' },
+            { num: 14, title: 'If else with turns' },
+            { num: 15, title: 'If else with repeat' },
+            { num: 16, title: 'Hard challenge', special: 'hard' },
+            { num: 17, title: 'Final boss', special: 'boss' },
+            { num: 18, title: 'Maze project', special: 'project' },
+
+            { type: 'stage', title: 'Stage 1: Introduction and print' },
+            { num: 19, title: 'What is Python?' },
+            { num: 20, title: 'Python quiz 1', special: 'quiz' },
+            { num: 21, title: 'Hello World' },
+            { num: 22, title: 'Print messages' },
+            { num: 23, title: 'Print two lines' },
+            { num: 24, title: 'Print multiple lines' },
+            { num: 25, title: 'Print numbers' },
+            { num: 26, title: 'Print text and numbers' },
+            { num: 27, title: 'Fix print errors' },
+            { num: 28, title: 'Print challenge', special: 'hard' },
+
+            { type: 'stage', title: 'Stage 2: Variables and data types' },
+            { num: 29, title: 'What are variables?' },
+            { num: 30, title: 'Create variables' },
+            { num: 31, title: 'Update variables' },
+            { num: 32, title: 'Multiple variables' },
+            { num: 33, title: 'Variable naming' },
+            { num: 34, title: 'Python data types' },
+            { num: 35, title: 'Check types with type()' },
+            { num: 36, title: 'Numbers and strings' },
+            { num: 37, title: 'Convert data types' },
+            { num: 38, title: 'Boolean values' },
+            { num: 39, title: 'Data types quiz 2', special: 'quiz' },
+            { num: 40, title: 'Student profile', special: 'project' },
+
+            { type: 'stage', title: 'Stage 3: User input' },
+            { num: 41, title: 'Get user input' },
+            { num: 42, title: 'Store user input' },
+            { num: 43, title: 'Input returns strings' },
+            { num: 44, title: 'Integer input' },
+            { num: 45, title: 'Decimal input' },
+            { num: 46, title: 'Combine input and print' },
+            { num: 47, title: 'Input quiz 3', special: 'quiz' },
+            { num: 48, title: 'Age calculator' },
+
+            { type: 'stage', title: 'Stage 4: Arithmetic' },
+            { num: 49, title: 'Addition' },
+            { num: 50, title: 'Subtraction' },
+            { num: 51, title: 'Multiplication' },
+            { num: 52, title: 'Division' },
+            { num: 53, title: 'Floor division' },
+            { num: 54, title: 'Remainder operator' },
+            { num: 55, title: 'Exponentiation' },
+            { num: 56, title: 'Operator precedence' },
+            { num: 57, title: 'Update operators' },
+            { num: 58, title: 'Arithmetic quiz 4', special: 'quiz' },
+            { num: 59, title: 'Fix calculation errors' },
+            { num: 60, title: 'Mini calculator', special: 'project' },
+
+            { type: 'stage', title: 'Stage 5: Strings' },
+            { num: 61, title: 'Create strings' },
+            { num: 62, title: 'Join strings' },
+            { num: 63, title: 'Repeat strings' },
+            { num: 64, title: 'String length' },
+            { num: 65, title: 'String indexing' },
+            { num: 66, title: 'Negative indexing' },
+            { num: 67, title: 'String slicing' },
+            { num: 68, title: 'Uppercase and lowercase' },
+            { num: 69, title: 'Remove extra spaces' },
+            { num: 70, title: 'Replace text' },
+            { num: 71, title: 'Search within strings' },
+            { num: 72, title: 'String quiz 5', special: 'quiz' },
+            { num: 73, title: 'Text analyzer', special: 'project' },
+
+            { type: 'stage', title: 'Stage 6: Conditions' },
+            { num: 74, title: 'Comparison operators' },
+            { num: 75, title: 'The if statement' },
+            { num: 76, title: 'Indentation' },
+            { num: 77, title: 'If else statements' },
+            { num: 78, title: 'Elif statements' },
+            { num: 79, title: 'Logical operators' },
+            { num: 80, title: 'Nested conditions' },
+            { num: 81, title: 'Conditions with input' },
+            { num: 82, title: 'Conditions quiz 6', special: 'quiz' },
+            { num: 83, title: 'Debug conditions' },
+            { num: 84, title: 'Grade calculator', special: 'project' },
+
+            { type: 'stage', title: 'Stage 7: Loops' },
+            { num: 85, title: 'Why use loops?' },
+            { num: 86, title: 'For loops' },
+            { num: 87, title: 'The range function' },
+            { num: 88, title: 'Range with steps' },
+            { num: 89, title: 'Loop through strings' },
+            { num: 90, title: 'While loops' },
+            { num: 91, title: 'While conditions' },
+            { num: 92, title: 'Break statement' },
+            { num: 93, title: 'Continue statement' },
+            { num: 94, title: 'For vs while' },
+            { num: 95, title: 'Loops quiz 7', special: 'quiz' },
+            { num: 96, title: 'Nested loops' },
+            { num: 97, title: 'Number patterns' },
+            { num: 98, title: 'Loop challenge', special: 'hard' },
+            { num: 99, title: 'Menu program', special: 'project' },
+
+            { type: 'stage', title: 'Stage 8: Functions' },
+            { num: 100, title: 'What are functions?' },
+            { num: 101, title: 'Define a function' },
+            { num: 102, title: 'Call a function' },
+            { num: 103, title: 'Function parameters' },
+            { num: 104, title: 'Multiple parameters' },
+            { num: 105, title: 'Default parameters' },
+            { num: 106, title: 'Print vs return' },
+            { num: 107, title: 'Return values' },
+            { num: 108, title: 'Functions quiz 8', special: 'quiz' },
+            { num: 109, title: 'Call functions together' },
+            { num: 110, title: 'Variable scope' },
+            { num: 111, title: 'Fix function errors' },
+            { num: 112, title: 'Calculator functions', special: 'project' },
+
+            { type: 'stage', title: 'Stage 9: Lists & Collections' },
+            { num: 113, title: 'Create lists' },
+            { num: 114, title: 'List indexing' },
+            { num: 115, title: 'Negative indexing' },
+            { num: 116, title: 'List slicing' },
+            { num: 117, title: 'Update list items' },
+            { num: 118, title: 'Append items' },
+            { num: 119, title: 'Insert items' },
+            { num: 120, title: 'Remove items' },
+            { num: 121, title: 'Pop items' },
+            { num: 122, title: 'List quiz 9', special: 'quiz' },
+            { num: 123, title: 'List challenge', special: 'hard' },
+            { num: 124, title: 'Create tuples' },
+            { num: 125, title: 'Tuple indexing and unpacking' },
+            { num: 126, title: 'Create sets' },
+            { num: 127, title: 'Set methods and operations' },
+            { num: 128, title: 'Collections quiz 10', special: 'quiz' },
+            { num: 129, title: 'Create dictionaries' },
+            { num: 130, title: 'Dictionary methods and iteration' },
+            { num: 131, title: 'Final boss combining lists, tuples, sets, dictionaries, loops, conditions, and functions', special: 'boss' },
+            { num: 132, title: 'Final project: build a complete interactive student management system', special: 'project' }
+        ];
+
+        let itemsLoadedCount = 0;
+        const batchSize = 35; // loads roughly 30-35 items at a time
+
+        function renderNextBatch() {
+            const container = document.getElementById('levels-container');
+            const loadMoreBtnContainer = document.getElementById('load-more-container');
+            
+            const nextItems = rawData.slice(itemsLoadedCount, itemsLoadedCount + batchSize);
+            if (nextItems.length === 0) {
+                loadMoreBtnContainer.innerHTML = '<p class="text-xs text-zinc-500 font-fun">🎉 You have reached the end of the Python Adventure Path!</p>';
+                return;
+            }
+
+            nextItems.forEach((item, index) => {
+                const absoluteIndex = itemsLoadedCount + index;
+                if (item.type === 'stage') {
+                    // Render Stage Header banner
+                    const stageEl = document.createElement('div');
+                    stageEl.className = 'w-full my-6 p-4 rounded-2xl bg-cardbg border-2 border-cardborder shadow-chunky text-center';
+                    stageEl.innerHTML = `<h3 class="font-fun font-bold text-accentyellow text-sm md:text-base tracking-wide uppercase">${item.title}</h3>`;
+                    container.appendChild(stageEl);
+                } else {
+                    // Render Level Circle Node with zig-zag offset simulating Duolingo map weaving
+                    // Weaving calculation: sine-like horizontal offset using modulo pattern
+                    const weaveOffsets = ['translate-x-0', 'translate-x-12', 'translate-x-20', 'translate-x-12', 'translate-x-0', '-translate-x-12', '-translate-x-20', '-translate-x-12'];
+                    const offsetClass = weaveOffsets[absoluteIndex % weaveOffsets.length];
+
+                    const nodeEl = document.createElement('div');
+                    nodeEl.className = `path-node flex flex-col items-center cursor-pointer my-2 ${offsetClass}`;
+                    nodeEl.onclick = () => openLevelModal(item.num, item.title, item.special);
+
+                    // Determine shape/color based on special flags
+                    let bgCol = 'bg-electricblue border-blue-400 shadow-chunky-blue text-white';
+                    let iconHTML = `<span class="font-fun font-black text-lg">${item.num}</span>`;
+                    let shapeClass = 'w-16 h-16 rounded-full'; // default circle
+
+                    if (item.special === 'quiz') {
+                        bgCol = 'bg-quizpurple border-purple-400 shadow-chunky-purple text-white';
+                        iconHTML = `<i class="fa-solid fa-puzzle-piece text-lg"></i>`;
+                        shapeClass = 'w-16 h-16 rounded-2xl rotate-45'; // Diamond for quiz
+                    } else if (item.special === 'hard') {
+                        bgCol = 'bg-orange-600 border-orange-400 shadow-[0_6px_0_0_#c2410c] text-white';
+                        iconHTML = `<i class="fa-solid fa-bolt text-lg"></i>`;
+                        shapeClass = 'w-16 h-16 rounded-2xl'; // Rounded square for hard
+                    } else if (item.special === 'boss' || item.special === 'project') {
+                        bgCol = 'bg-bossred border-red-400 shadow-chunky-red text-white';
+                        iconHTML = `<i class="fa-solid fa-crown text-xl"></i>`;
+                        shapeClass = 'w-20 h-20 rounded-full ring-4 ring-accentyellow'; // Crown boss node
+                    }
+
+                    // Level 1 is unlocked by default in demo, others locked status styling
+                    const isUnlocked = (item.num === 1);
+                    const opacityClass = isUnlocked ? 'opacity-100 hover:scale-110' : 'opacity-80 hover:scale-105';
+
+                    nodeEl.innerHTML = `
+                        <div class="${shapeClass} ${bgCol} border-4 flex items-center justify-center ${opacityClass} transition shadow-lg relative">
+                            <div class="${item.special === 'quiz' ? '-rotate-45' : ''}">
+                                ${iconHTML}
+                            </div>
+                            ${!isUnlocked ? '<div class="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-darkbg border-2 border-cardborder flex items-center justify-center text-xs text-zinc-400"><i class="fa-solid fa-lock"></i></div>' : ''}
+                        </div>
+                        <span class="font-fun text-xs font-bold text-zinc-400 mt-2 max-w-[120px] text-center truncate">Lvl ${item.num}: ${item.title}</span>
+                    `;
+                    container.appendChild(nodeEl);
+                }
+            });
+
+            itemsLoadedCount += nextItems.length;
+        }
+
+        function loadMoreLevels() {
+            renderNextBatch();
+            showToast('Loaded More!', 'Showing additional levels along the path.');
+        }
+
+        // Modal Logic
+        function openLevelModal(num, title, special) {
+            const modal = document.getElementById('level-modal');
+            const content = document.getElementById('modal-content');
+            
+            document.getElementById('modal-level-badge').innerText = `Level ${num} ${special ? '• ' + special.toUpperCase() : ''}`;
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-status').innerText = (num === 1) ? 'Unlocked (Ready to Play)' : 'Locked (Complete previous level)';
+            
+            // Set dynamic link to lvl/levelX.html as requested
+            const startBtn = document.getElementById('modal-start-btn');
+            startBtn.href = `lvl/level${num}.html`;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('level-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+
+        // Custom Toast Notification System (Fixes showToast reference error)
+        function showToast(title, message) {
+            const toast = document.getElementById('toast');
+            const titleEl = document.getElementById('toast-title');
+            const msgEl = document.getElementById('toast-msg');
+            
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            toast.classList.remove('translate-x-full');
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+            }, 3500);
+        }
+
+        // Initialize first batch on window load
+        window.onload = function() {
+            renderNextBatch();
+            setTimeout(() => {
+                showToast('Adventure Ready!', 'Scroll down and click Level 1 to begin.');
+            }, 500);
+        };
+    </script>
+</body>
+</html>

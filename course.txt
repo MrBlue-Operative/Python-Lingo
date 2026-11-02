@@ -1,0 +1,142 @@
+Level 1: Move forward
+Level 2: Turn left
+Level 3: Turn right
+Level 4: Combine turns
+Level 5: Practice turns
+Level 6: Repeat block
+Level 7: Repeat with turns
+Level 8: Hard maze
+Level 9: If block
+Level 10: If with turns
+Level 11: If with repeat
+Level 12: If challenge
+Level 13: If else block
+Level 14: If else with turns
+Level 15: If else with repeat
+Level 16: Hard challenge
+Level 17: Final boss
+Level 18: Maze project
+PYTHON
+Stage 1: Introduction and print
+Level 19: What is Python?
+Level 20: Python quiz 1
+Level 21: Hello World
+Level 22: Print messages
+Level 23: Print two lines
+Level 24: Print multiple lines
+Level 25: Print numbers
+Level 26: Print text and numbers
+Level 27: Fix print errors
+Level 28: Print challenge
+Stage 2: Variables and data types
+Level 29: What are variables?
+Level 30: Create variables
+Level 31: Update variables
+Level 32: Multiple variables
+Level 33: Variable naming
+Level 34: Python data types
+Level 35: Check types with type()
+Level 36: Numbers and strings
+Level 37: Convert data types
+Level 38: Boolean values
+Level 39: Data types quiz 2
+Level 40: Student profile
+Stage 3: User input
+Level 41: Get user input
+Level 42: Store user input
+Level 43: Input returns strings
+Level 44: Integer input
+Level 45: Decimal input
+Level 46: Combine input and print
+Level 47: Input quiz 3
+Level 48: Age calculator
+Stage 4: Arithmetic
+Level 49: Addition
+Level 50: Subtraction
+Level 51: Multiplication
+Level 52: Division
+Level 53: Floor division
+Level 54: Remainder operator
+Level 55: Exponentiation
+Level 56: Operator precedence
+Level 57: Update operators
+Level 58: Arithmetic quiz 4
+Level 59: Fix calculation errors
+Level 60: Mini calculator
+Stage 5: Strings
+Level 61: Create strings
+Level 62: Join strings
+Level 63: Repeat strings
+Level 64: String length
+Level 65: String indexing
+Level 66: Negative indexing
+Level 67: String slicing
+Level 68: Uppercase and lowercase
+Level 69: Remove extra spaces
+Level 70: Replace text
+Level 71: Search within strings
+Level 72: String quiz 5
+Level 73: Text analyzer
+Stage 6: Conditions
+Level 74: Comparison operators
+Level 75: The if statement
+Level 76: Indentation
+Level 77: If else statements
+Level 78: Elif statements
+Level 79: Logical operators
+Level 80: Nested conditions
+Level 81: Conditions with input
+Level 82: Conditions quiz 6
+Level 83: Debug conditions
+Level 84: Grade calculator
+Stage 7: Loops
+Level 85: Why use loops?
+Level 86: For loops
+Level 87: The range function
+Level 88: Range with steps
+Level 89: Loop through strings
+Level 90: While loops
+Level 91: While conditions
+Level 92: Break statement
+Level 93: Continue statement
+Level 94: For vs while
+Level 95: Loops quiz 7
+Level 96: Nested loops
+Level 97: Number patterns
+Level 98: Loop challenge
+Level 99: Menu program
+Stage 8: Functions
+Level 100: What are functions?
+Level 101: Define a function
+Level 102: Call a function
+Level 103: Function parameters
+Level 104: Multiple parameters
+Level 105: Default parameters
+Level 106: Print vs return
+Level 107: Return values
+Level 108: Functions quiz 8
+Level 109: Call functions together
+Level 110: Variable scope
+Level 111: Fix function errors
+Level 112: Calculator functions
+Stage 9: Lists
+Level 113: Create lists
+Level 114: List indexing
+Level 115: Negative indexing
+Level 116: List slicing
+Level 117: Update list items
+Level 118: Append items
+Level 119: Insert items
+Level 120: Remove items
+Level 121: Pop items
+Level 122: List quiz 9
+Level 123: List challenge
+Level 124: Create tuples
+Level 125: Tuple indexing and unpacking
+Level 126: Create sets
+Level 127: Set methods and operations
+Level 128: Collections quiz 10
+Level 129: Create dictionaries
+Level 130: Dictionary methods and iteration
+Level 131: Final boss combining lists, tuples, sets, dictionaries, loops, conditions, and functions
+Level 132: Final project: build a complete interactive student management system
